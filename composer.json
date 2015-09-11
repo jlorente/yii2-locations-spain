@@ -1,0 +1,22 @@
+{
+    "name": "jlorente/yii2-locations-spain",
+    "description": "A Yii2 extension of the jlorente/yii2-locations module that provides the module with all the spanish regions and cities.",
+    "keywords": ["yii2", "location", "region", "city", "spain", "regions", "cities", "spanish"],
+    "homepage": "https://github.com/jlorente/yii2-locations-spain",
+    "type": "yii2-extension",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Jose Lorente Martin",
+            "email": "jose.lorente.martin@gmail.com"
+        }
+    ],
+    "require": {
+        "jlorente/yii2-locations": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "jlorente\\location\\": "src/"
+        }
+    }
+}
