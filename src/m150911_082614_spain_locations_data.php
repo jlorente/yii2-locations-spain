@@ -131,7 +131,7 @@ class m150911_082614_spain_locations_data extends Migration {
 
         foreach ($regions as $rData) {
             $region = new Region([
-                'name' => $rData['data'],
+                'name' => $rData['name'],
                 'country_id' => $this->countryId
             ]);
             if ($region->save() === false) {
