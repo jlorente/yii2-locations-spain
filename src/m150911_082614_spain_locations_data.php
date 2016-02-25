@@ -15,6 +15,11 @@ use jlorente\location\exceptions\SaveException;
 /**
  * Location module tables creation.
  * 
+ * To apply this migration run:
+ * ```bash
+ * $ ./yii migrate --migrationPath=@vendor/jlorente/yii2-locations-spain/src/migrations
+ * ```
+ * 
  * @author José Lorente <jose.lorente.martin@gmail.com>
  */
 class m150911_082614_spain_locations_data extends Migration {
