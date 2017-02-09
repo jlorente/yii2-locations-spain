@@ -58,7 +58,10 @@ class m150911_082614_spain_locations_data extends Migration {
      * @inheritdoc
      */
     public function down() {
-        return false;
+        $id = $this->db->createCommand('SELECT id FROM jl_loc_country WHERE code ="es"')->queryScalar();
+        $this->delete('jl_loc_location', ['country_id' => $id]);
+        $this->delete('jl_loc_country', ['id' => $id]);
+        return true;
     }
 
     /**
