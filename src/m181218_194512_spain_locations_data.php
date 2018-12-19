@@ -10,7 +10,6 @@ use jlorente\location\db\Country;
 use jlorente\location\db\Region;
 use jlorente\location\db\State;
 use jlorente\location\exceptions\SaveException;
-use Yii;
 use yii\db\Migration;
 
 /**
@@ -44,6 +43,7 @@ class m181218_194512_spain_locations_data extends Migration
             $this->integrateStates();
             $this->updateRegions();
             $this->updateCities();
+            $this->updateLocations();
             $trans->commit();
         } catch (\Exception $ex) {
             $trans->rollback();
@@ -201,7 +201,7 @@ SQL
     {
         $this->execute(<<<SQL
 UPDATE jl_loc_location jll 
-    INNER JOIN jl_loc_region jlr ON jlr.id = jlc.region_id
+    INNER JOIN jl_loc_region jlr ON jlr.id = jll.region_id
     SET jll.state_id = jlr.state_id;
 SQL
         );
