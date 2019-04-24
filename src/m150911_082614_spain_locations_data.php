@@ -22,7 +22,8 @@ use jlorente\location\exceptions\SaveException;
  * 
  * @author José Lorente <jose.lorente.martin@gmail.com>
  */
-class m150911_082614_spain_locations_data extends Migration {
+class m150911_082614_spain_locations_data extends Migration
+{
 
     /**
      * Map of the incoming ids to the current database ids.
@@ -39,11 +40,19 @@ class m150911_082614_spain_locations_data extends Migration {
     protected $countryId;
 
     /**
+     *
+     * @var string
+     */
+    protected $now;
+
+    /**
      * @inheritdoc
      */
-    public function up() {
+    public function up()
+    {
         $trans = Yii::$app->db->beginTransaction();
         try {
+            $this->now = time();
             $this->integrateCountry();
             $this->integrateRegions();
             $this->integrateCities();
@@ -57,7 +66,8 @@ class m150911_082614_spain_locations_data extends Migration {
     /**
      * @inheritdoc
      */
-    public function down() {
+    public function down()
+    {
         $id = $this->db->createCommand('SELECT id FROM jl_loc_country WHERE code ="es"')->queryScalar();
         $this->delete('jl_loc_location', ['country_id' => $id]);
         $this->delete('jl_loc_country', ['id' => $id]);
@@ -67,7 +77,8 @@ class m150911_082614_spain_locations_data extends Migration {
     /**
      * Integrates the country registry.
      */
-    protected function integrateCountry() {
+    protected function integrateCountry()
+    {
         $country = new Country([
             'name' => 'España',
             'code' => 'es'
@@ -81,7 +92,8 @@ class m150911_082614_spain_locations_data extends Migration {
     /**
      * Integrates the regions registries.
      */
-    protected function integrateRegions() {
+    protected function integrateRegions()
+    {
         $regions = [
             ['_id' => 1, 'name' => 'Álava'],
             ['_id' => 2, 'name' => 'Albacete'],
@@ -138,21 +150,21 @@ class m150911_082614_spain_locations_data extends Migration {
         ];
 
         foreach ($regions as $rData) {
-            $region = new Region([
-                'name' => $rData['name'],
-                'country_id' => $this->countryId
+            $this->insert(Region::tableName(), [
+                'name' => $rData['name']
+                , 'country_id' => $this->countryId
+                , 'created_at' => $this->now
+                , 'updated_at' => $this->now
             ]);
-            if ($region->save() === false) {
-                throw new SaveException($region);
-            }
-            $this->regionMapping[$rData['_id']] = $region->id;
+            $this->regionMapping[$rData['_id']] = $this->getDb()->getLastInsertID();
         }
     }
 
     /**
      * Integrates the cities registries.
      */
-    protected function integrateCities() {
+    protected function integrateCities()
+    {
         $cities = [
             ['_regionId' => 1, 'name' => 'Alegría-Dulantzi'],
             ['_regionId' => 2, 'name' => 'Abengibre'],
@@ -8273,13 +8285,12 @@ class m150911_082614_spain_locations_data extends Migration {
         ];
 
         foreach ($cities as $dataCity) {
-            $city = new City([
-                'name' => $dataCity['name'],
-                'region_id' => $this->regionMapping[$dataCity['_regionId']]
+            $this->insert(City::tableName(), [
+                'name' => $dataCity['name']
+                , 'region_id' => $this->regionMapping[$dataCity['_regionId']]
+                , 'created_at' => $this->now
+                , 'updated_at' => $this->now
             ]);
-            if ($city->save() === false) {
-                throw new SaveException($city);
-            }
         }
     }
 
